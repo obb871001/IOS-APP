@@ -1,5 +1,5 @@
 import { Link, useLocalSearchParams } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Animated,
   Image,
@@ -13,6 +13,12 @@ import { FadeIn, SlideInDown } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { GOOGLE_API } from "../../../api/get";
+import PagerView from "react-native-pager-view";
+import Star from "./components/star";
+import FoodRate from "./components/FoodRate";
+import FoodDescription from "./components/FoodDescription";
+import { PRICE_LEVEL } from "./utils/constants";
+import FoodStatus from "./components/FoodStatus";
 
 const apiKey = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
 
@@ -35,10 +41,46 @@ const initialState = {
   reviews: [],
 };
 
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    height: 250,
+  },
+  page: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
+
 const PlaceId = () => {
   const { place_id } = useLocalSearchParams();
 
   const [foodDetail, setFoodDetail] = useState(initialState);
+
+  const foodCarousel = useMemo(() => {
+    return (
+      <PagerView
+        key={foodDetail.photos.length}
+        overScrollMode="auto"
+        pageMargin={20}
+        style={styles.container}
+        initialPage={0}
+      >
+        {foodDetail.photos.map((photo, idx) => {
+          return (
+            <View className="items-center justify-center" key={`${idx + 1}`}>
+              <Image
+                className="w-full h-full rounded-[15px]"
+                source={{
+                  uri: `${GOOGLE_API.PLACE_PHOTO}?maxwidth=400&photoreference=${photo.photo_reference}&key=${apiKey}`,
+                }}
+              />
+            </View>
+          );
+        })}
+      </PagerView>
+    );
+  }, [foodDetail]);
 
   useEffect(() => {
     const fetchNearLocation = async () => {
@@ -80,12 +122,13 @@ const PlaceId = () => {
     fetchNearLocation();
   }, [place_id]);
 
+  console.log(foodDetail.editorial_summary);
   return (
     <Animated.View entering={FadeIn} className="flex-1 bg-neutral-800">
       {/* 內容區塊：白底、圓角、可捲動 */}
       <ScrollView className="rounded-[30px]">
-        <SafeAreaView className="p-4">
-          <View className="flex-row items-center justify-between mb-[20px]">
+        <SafeAreaView className="p-4 gap-[10px]">
+          <View className="flex-row items-center justify-between mb-[0px]">
             <Link href="/food">
               <View className="w-[40px] h-[40px] flex-row items-center justify-center rounded-full border-2 border-neutral-500">
                 <Ionicons name="arrow-back-outline" size="25" color="white" />
@@ -96,31 +139,54 @@ const PlaceId = () => {
               <Ionicons name="heart-outline" size="30" color="white" />
             </View>
           </View>
+          {/* 食物圖片 */}
+          <View className="mb-[10px]">{foodCarousel}</View>
 
-          {/* 評分 / 價格 */}
-          {/* 地點名稱 */}
-          <Text className="text-[25px] text-white font-bold mb-2">
-            {foodDetail.name}
-          </Text>
-          <Text className="mb-1">評分：{foodDetail.rating} / 5</Text>
-          <Text className="mb-2">價格等級：{foodDetail.price_level}</Text>
-
-          {/* 地址 / 電話 */}
-          <Text className="mb-1">地址：{foodDetail.formatted_address}</Text>
-          <Text className="mb-2">
-            電話：{foodDetail.formatted_phone_number}
-          </Text>
-
-          {/* 營業狀態 / 營業時間 */}
-          <Text className="mb-1">
-            狀態：
-            {foodDetail.current_opening_hours.open_now ? "營業中" : "未營業"}
-          </Text>
-          {foodDetail.current_opening_hours.weekday_text.map((text, idx) => (
-            <Text key={idx} className="text-gray-600 text-sm">
-              {text}
+          <View>
+            {/* 店名 */}
+            <Text className="text-[25px] text-white font-semibold mb-2">
+              {foodDetail.name}
             </Text>
-          ))}
+            {/* 評分 */}
+            <FoodRate rate={foodDetail.rating} />
+          </View>
+
+          {/* 餐廳狀態 */}
+          <View>
+            <FoodStatus
+              openNow={foodDetail.current_opening_hours.open_now}
+              openingHours={foodDetail.current_opening_hours.weekday_text}
+            />
+          </View>
+
+          <View className="gap-[0px]">
+            {/* 價格等級 */}
+            <View>
+              <FoodDescription
+                className="text-lg text-white"
+                descriptionTitle="價格等級"
+                descriptionValue={PRICE_LEVEL[foodDetail.price_level]}
+              />
+            </View>
+
+            {/* 地址  */}
+            <View>
+              <FoodDescription
+                className="text-lg text-white"
+                descriptionTitle="餐廳地址"
+                descriptionValue={foodDetail.formatted_address}
+              />
+            </View>
+
+            {/* 電話 */}
+            <View>
+              <FoodDescription
+                className="text-lg text-white"
+                descriptionTitle="電話"
+                descriptionValue={foodDetail.formatted_phone_number}
+              />
+            </View>
+          </View>
 
           {/* 簡介（editorial_summary） */}
           {foodDetail.editorial_summary ? (

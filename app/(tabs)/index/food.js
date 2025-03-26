@@ -23,28 +23,28 @@ const Food = () => {
           <View className="flex-col gap-[15px]">
             {foodList?.map((food, index) => {
               return (
-                <View
-                  key={`${food.name}-${index}`}
-                  className="bg-[rgba(0,0,0,0.7)] p-4 rounded-[15px] flex-row items-center justify-between gap-[20px]"
-                >
-                  <View className="flex-col gap-[10px] max-w-[90%]">
-                    <Text className="text-white text-[23px] font-bold">
-                      {food.name}
-                    </Text>
-                    <Text className="text-white text-[18px]">
-                      地址：{food.vicinity}
-                    </Text>
-                  </View>
-                  <View className="">
-                    <Link href={`/food-modal/${food.place_id}`}>
+                <Link href={`/food-modal/${food.place_id}`}>
+                  <View
+                    key={`${food.name}-${index}`}
+                    className="w-full bg-[rgba(0,0,0,0.7)] p-4 rounded-[15px] flex-row items-center justify-between gap-[20px]"
+                  >
+                    <View className="flex-col gap-[10px] max-w-[90%]">
+                      <Text className="text-white text-[23px] font-bold">
+                        {food.name}
+                      </Text>
+                      <Text className="text-white text-[18px]">
+                        地址：{food.vicinity}
+                      </Text>
+                    </View>
+                    <View className="">
                       <Ionicons
                         color="white"
                         name="chevron-forward-outline"
                         size="20"
                       />
-                    </Link>
+                    </View>
                   </View>
-                </View>
+                </Link>
               );
             })}
           </View>
