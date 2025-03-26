@@ -2,6 +2,7 @@ import { Link, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   Animated,
+  Image,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -11,6 +12,9 @@ import {
 import { FadeIn, SlideInDown } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
+import { GOOGLE_API } from "../../../api/get";
+
+const apiKey = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
 
 const initialState = {
   current_opening_hours: {
@@ -38,8 +42,7 @@ const PlaceId = () => {
 
   useEffect(() => {
     const fetchNearLocation = async () => {
-      const apiKey = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
-      const url = "https://maps.googleapis.com/maps/api/place/details/json";
+      const url = GOOGLE_API.PLACE_DETAIL;
       const language = "zh-TW";
 
       if (!place_id) return;

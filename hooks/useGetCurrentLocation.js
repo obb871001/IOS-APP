@@ -3,6 +3,7 @@ import * as Location from "expo-location";
 import { Platform, Text, View, StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
 import { SET_CURRENT_LOCATION } from "../redux/action/action";
+import { GOOGLE_API } from "../app/api/get";
 
 const useGetCurrentLocation = () => {
   const [location, setLocation] = useState(null);
@@ -35,7 +36,7 @@ const useGetCurrentLocation = () => {
     if (coords?.latitude && coords?.longitude) {
       const fetchLocation = async () => {
         const apiKey = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
-        const url = process.env.EXPO_PUBLIC_GOOGLE_GEOCODE_API_URL;
+        const url = GOOGLE_API.GEOCODE;
 
         const response = await fetch(
           `${url}?latlng=${coords.latitude},${coords.longitude}&key=${apiKey}&language=zh-TW`
