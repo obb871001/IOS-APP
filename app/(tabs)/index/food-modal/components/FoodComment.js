@@ -24,7 +24,7 @@ const AnimatedPager = Animated.createAnimatedComponent(PagerView);
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    height: 200,
+    height: 250,
   },
   page: {
     justifyContent: "center",

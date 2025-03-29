@@ -9,12 +9,6 @@ const FoodAddress = ({
 }) => {
   const { lat, lng } = geometry;
   const handlePress = () => {
-    // Clipboard.setString(address);
-    // Toast.show({
-    //   type: "success",
-    //   text1: "已複製地址",
-    // });
-
     const scheme = Platform.select({
       ios: `maps://?q=${foodName}&ll=${lat},${lng}`,
     });

@@ -24,6 +24,7 @@ import FoodComment from "./components/FoodComment";
 import FoodTags from "./components/FoodTags";
 import FoodAddress from "./components/FoodAddress";
 import FoodPhoneNumber from "./components/FoodPhoneNumber";
+import PrevButton from "../../../components/PrevButton";
 
 const apiKey = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
 
@@ -114,17 +115,7 @@ const PlaceId = () => {
             <FoodCarousel foodDetail={foodDetail} />
           </View>
           <View className="p-4 h-[340px] justify-between">
-            <View className="flex-row items-center justify-between mb-[0px]">
-              <Link href="/food">
-                <View className="w-[40px] h-[40px] flex-row items-center justify-center rounded-full bg-[rgba(115,115,115,0.6)]">
-                  <Ionicons name="arrow-back-outline" size="25" color="white" />
-                </View>
-              </Link>
-
-              <View>
-                <Ionicons name="heart-outline" size="30" color="white" />
-              </View>
-            </View>
+            <PrevButton prevPath="/food" />
             {/* 食物圖片 */}
 
             <View className="gap-[10px]">

@@ -1,18 +1,24 @@
-import { useRouter } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import React from "react";
-import { Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-const PrevButton = () => {
+const PrevButton = ({
+  prevPath = "", //上一頁路徑
+}) => {
   const router = useRouter();
   return (
-    <TouchableOpacity
-      onPress={() => router.back()}
-      className="h-[40px] flex-row items-center justify-start rounded-full gap-[5px]"
-    >
-      <Ionicons name="chevron-back-outline" color="white" size="40" />
-      <Text className="text-white text-[20px]">返回</Text>
-    </TouchableOpacity>
+    <View className="flex-row items-center justify-between mb-[0px]">
+      <Link href={prevPath || -1}>
+        <View className="w-[40px] h-[40px] flex-row items-center justify-center rounded-full bg-[rgba(115,115,115,0.6)]">
+          <Ionicons name="arrow-back-outline" size="25" color="white" />
+        </View>
+      </Link>
+
+      <View>
+        <Ionicons name="heart-outline" size="30" color="white" />
+      </View>
+    </View>
   );
 };
 

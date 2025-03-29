@@ -33,7 +33,7 @@ const CurrentLocationCard = () => {
       const url =
         "https://maps.googleapis.com/maps/api/place/nearbysearch/json";
       const keyword = "";
-      const radius = 5000;
+      const radius = 1000;
       const type = "restaurant";
       const language = "zh-TW";
 

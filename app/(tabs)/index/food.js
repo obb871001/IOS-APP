@@ -1,6 +1,14 @@
 import { Link, Stack } from "expo-router";
 import React from "react";
-import { Image, ScrollView, Text, View } from "react-native";
+import {
+  Image,
+  Linking,
+  Platform,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import BackgroundWrapper from "../../components/backgroundWrapper";
 import { useSelector } from "react-redux";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -24,44 +32,50 @@ const Food = () => {
           <Text className="text-white text-[30px] mb-[20px]">
             附近所有的美食...
           </Text>
-          <View className="flex-col gap-[20px]">
+          <View className="flex-col gap-[15px]">
             {foodList?.map((food, index) => {
               return (
                 <Link href={`/food-modal/${food.place_id}`}>
-                  <View className="w-full bg-neutral-800 rounded-[15px] overflow-hidden">
+                  <View
+                    key={`${food.name}-${index}`}
+                    className="w-full bg-[rgba(0,0,0,0.7)] px-2 py-2 rounded-[15px] flex-row items-center justify-between gap-[10px]"
+                  >
                     <View>
                       <Image
                         source={{
                           uri: `${GOOGLE_API.PLACE_PHOTO}?maxwidth=400&maxheight=400&photoreference=${food.photos[0].photo_reference}&key=${apiKey}`,
                         }}
-                        className="w-full h-[150px]"
+                        className="w-[80px] h-[80px] rounded-[10px]"
                       />
                     </View>
-                    <View
-                      key={`${food.name}-${index}`}
-                      className="p-4 flex-row items-center justify-between gap-[20px]"
-                    >
-                      <View className="flex-col gap-[10px] max-w-[90%]">
-                        <View className="flex-col gap-[2.5px]">
-                          <Text
-                            numberOfLines={1}
-                            className="text-white text-[23px] font-bold"
-                          >
-                            {food.name}
-                          </Text>
-                          <FoodRate rate={food.rating} starSize={17.5} />
-                        </View>
-                        {/* <Text className="text-white text-[18px]">
-                          地址：{food.vicinity}
-                        </Text> */}
+                    <View className="flex-col flex-1 gap-[10px] max-w-[90%]">
+                      <View className="flex-col gap-[2.5px]">
+                        {/* 名稱 */}
+                        <Text
+                          numberOfLines={1}
+                          className="text-white text-[18px] font-bold"
+                        >
+                          {food.name}
+                        </Text>
+                        {/* 評分 */}
+                        <FoodRate rate={food.rating} starSize={12} />
                       </View>
-                      <View className="">
-                        <Ionicons
-                          color="white"
-                          name="chevron-forward-outline"
-                          size="20"
-                        />
+                      <View className="flex-row gap-[5px]">
+                        <Ionicons color="white" size="15" name="navigate" />
+                        <Text
+                          numberOfLines={1}
+                          className="text-white text-[12px]"
+                        >
+                          {food.vicinity}
+                        </Text>
                       </View>
+                    </View>
+                    <View className="">
+                      <Ionicons
+                        color="white"
+                        name="chevron-forward-outline"
+                        size="20"
+                      />
                     </View>
                   </View>
                 </Link>
