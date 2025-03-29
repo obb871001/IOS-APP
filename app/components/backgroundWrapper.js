@@ -7,6 +7,9 @@ const BackgroundWrapper = ({ children }) => {
       <StatusBar barStyle={"light-content"} />
       <ImageBackground
         source={require("../../assets/images/evening-bg.jpg")}
+        imageStyle={{
+          opacity: 1,
+        }}
         blurRadius={1}
         className="flex-1 pb-[80px]"
       >
